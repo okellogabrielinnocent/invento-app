@@ -70,7 +70,7 @@
                     @auth
                         <a href="{{ url('/home') }}">Home</a>
                     @else
-                        Welcome to the Home Page
+                    <a href="{{ url('/login') }}">Login</a>
                     @endauth
                 </div>
             @endif
