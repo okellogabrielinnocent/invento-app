@@ -12,13 +12,12 @@ use App\Models\User;
 
 class UserController extends Controller
 {
-    private $user;
+    private $userRespository;
 
     // inject UserRepository as 
-    public function __construct(UserRepository $user)
+    public function __construct(UserRepository $userRespository)
     {
-        $this->userRepository = $user;
-        $this->middleware('isAdmin')->only('create', 'store', 'edit', 'update', 'index');
+        $this->userRepository = $userRespository;
     }
     /**
      * Display a listing of user resource.
@@ -26,8 +25,10 @@ class UserController extends Controller
      * @return Factory|View
      */
     public function index()
-    {
-        $users = $this->userRepository->paginate(10);
+    {   
+        // $users = $this->userRepository->paginate(10);
+        // TO-DO Add pagination to the database
+        $users = $this->userRepository->config('settings.pagination.small');
         return view('users.index')->with(['users' => $users]);
     }
 
@@ -51,7 +52,7 @@ class UserController extends Controller
     {
         $data = $request->only('name', 'email', 'password');
         $data['password'] = Hash::make($data['password']);
-        $data['role'] = $request->get('isAdmin');
+        $data['role'] = $request->get('is_admin');
         User::create($data);
         return redirect()->to('users')->withSuccess('User Account Created Successfully');
     }
@@ -64,7 +65,7 @@ class UserController extends Controller
      */
     public function show(User $user)
     {
-        return view('users.show')->with(['user' => $user]);
+        return view('users.show', compact('user'));
     }
 
     /**
@@ -75,7 +76,7 @@ class UserController extends Controller
      */
     public function edit(User $user)
     {
-        return view('users.edit')->with(['user' => $user]);
+        return view('users.edit', compact('user'));
     }
 
 
@@ -86,12 +87,10 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, User $user)
     {
-        
-        User::whereId($id)->update($validatedData);
-
-        return redirect('/users')->with('success', 'User has been successfully updated');
+        $this->userRepository->update($user, $input);
+        return redirect('/users')->withSuccess('User has been successfully updated');
     }
 
     /**
@@ -103,7 +102,13 @@ class UserController extends Controller
      */
     public function destroy(User $user)
     {
-        $user->delete();
-        return redirect()->to('users')->withSuccess('user account Deleted');
+        try {
+            $user->delete();
+            return redirect()->to('users')->withSuccess('User Account Deleted');
+        } catch (\Exception $e) {
+            \Log::debug($e->getMessage());
+            return "No usser to delete!";
+        }
+        
     }
 }

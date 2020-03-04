@@ -37,8 +37,24 @@ class UserRepository implements Repository
         return $this->model::where($key, $value)->get();
     }
 
-    public function paginate($number)
+    public function update($id, $input)
     {
-        return $this->model::paginate($number);
+        $user = $this->find($id);
+        $input = Input::only('username', 'email', 'password', 'password_confirmation','role');
+
+        $user->fill($input);
+        $checkMail = $this->findByKey('email', $request->get('email'));
+        if($checkMail && $request->get('email') !== $user->email) {
+            return back()->withErrors(['email_taken' => "email $checkMail->email already in use"]);
+        }
+        $data = $request->only('email');
+
+        if($request->get('is_admin') && !$user->is_admin) {
+            $data['is_admin'] = true;
+        } elseif (!$request->get('is_admin') && $user->is_admin) {
+            $data['is_admin'] = false;
+        }
+
+        return $user->save();
     }
 }

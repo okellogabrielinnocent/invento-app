@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('dashboard-content')
+@section('user-content')
 
     <div class="container">
         <h1> Add User </h1>

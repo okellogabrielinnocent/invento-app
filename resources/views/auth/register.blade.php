@@ -64,8 +64,9 @@
                             <label for="role" class="col-md-4 col-form-label text-md-right">{{ __('Select User Type') }}</label>
                             <div class="col-md-6">
                                 <select class="form-control col-md-4 @error('role') is-invalid @enderror" name="role" id="role">
-                                <option>Customer</option>
-                                <option>Data Clerk</option>
+                                <option value='customer'>Customer</option>
+                                <option value='data_clerk'>Data Clerk</option>
+                                <option value='admin'>Admin</option>
                                 </select>
                                 @error('role')
                                     <span class="invalid-feedback" role="alert">
