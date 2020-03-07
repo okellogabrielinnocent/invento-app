@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Http\Controllers\User;
 
 use App\Http\Controllers\Controller;
@@ -8,7 +9,9 @@ use Illuminate\Contracts\View\Factory;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
-use App\Models\User;
+use App\Http\Controllers\User\UserRepository;
+use Illuminate\Foundation\Auth\User;
+use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
@@ -25,10 +28,10 @@ class UserController extends Controller
      * @return Factory|View
      */
     public function index()
-    {   
-        // $users = $this->userRepository->paginate(10);
+    {
+        $users = $this->userRepository->paginate(10);
         // TO-DO Add pagination to the database
-        $users = $this->userRepository->config('settings.pagination.small');
+        // $users = $this->userRepository->config('settings.pagination.small');
         return view('users.index')->with(['users' => $users]);
     }
 
@@ -52,7 +55,7 @@ class UserController extends Controller
     {
         $data = $request->only('name', 'email', 'password');
         $data['password'] = Hash::make($data['password']);
-        $data['role'] = $request->get('is_admin');
+        $data['role'] = $request->get('admin');
         User::create($data);
         return redirect()->to('users')->withSuccess('User Account Created Successfully');
     }
@@ -89,7 +92,7 @@ class UserController extends Controller
      */
     public function update(Request $request, User $user)
     {
-        $this->userRepository->update($user, $input);
+        $this->userRepository->update($user, $request);
         return redirect('/users')->withSuccess('User has been successfully updated');
     }
 
@@ -109,6 +112,5 @@ class UserController extends Controller
             \Log::debug($e->getMessage());
             return "No usser to delete!";
         }
-        
     }
 }

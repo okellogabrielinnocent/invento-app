@@ -9,6 +9,9 @@ use Illuminate\Notifications\Notifiable;
 class User extends Authenticatable
 {
     use Notifiable;
+    public static $ADMIN = "admin";
+    public static $DATAENTRANT = 'data_clerk';
+    public static $CUSTOMER = 'customer';
 
     /**
      * The attributes that are mass assignable.
@@ -16,7 +19,7 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'name', 'email', 'password','role',
+        'name', 'email', 'password', 'role',
     ];
 
     /**
@@ -36,4 +39,17 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    public function is_admin()
+    {
+        return $this->role == self::$ADMIN;
+    }
+    public function is_data_clerk()
+    {
+        return $this->role == self::$DATAENTRANT;
+    }
+    public function is_customer()
+    {
+        return $this->role == self::$CUSTOMER;
+    }
 }

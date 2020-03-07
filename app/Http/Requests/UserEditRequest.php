@@ -13,7 +13,7 @@ class UserEditRequest extends FormRequest
      */
     public function authorize()
     {
-        return true;
+        return auth()->user()->id || auth()->user()->is_admin();
     }
 
     /**

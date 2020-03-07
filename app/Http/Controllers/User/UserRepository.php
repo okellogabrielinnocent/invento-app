@@ -3,12 +3,10 @@
 
 namespace App\Http\Controllers\User;
 
-
-use App\Contracts\Repository;
-use App\Models\User;
+use Illuminate\Foundation\Auth\User;
 use Illuminate\Database\Eloquent\Model;
 
-class UserRepository implements Repository
+class UserRepository
 {
     private $model;
 
@@ -22,12 +20,12 @@ class UserRepository implements Repository
         return $this->model::all();
     }
 
-    public function findOneOrFail($id)
+    public function findOneOrFail($id): ?Model
     {
         return $this->model::findOrFail($id);
     }
 
-    public function findByKey($key, $value)
+    public function findByKey($key, $value): ?Model
     {
         return $this->model::where($key, $value)->first();
     }
@@ -37,24 +35,28 @@ class UserRepository implements Repository
         return $this->model::where($key, $value)->get();
     }
 
-    public function update($id, $input)
+    public function update($id, $request)
     {
-        $user = $this->find($id);
-        $input = Input::only('username', 'email', 'password', 'password_confirmation','role');
+        $user = $this->findOneOrFail($id);
+        $request = Input::only('username', 'email', 'password', 'password_confirmation', 'role');
 
-        $user->fill($input);
+        $user->fill($request);
         $checkMail = $this->findByKey('email', $request->get('email'));
-        if($checkMail && $request->get('email') !== $user->email) {
+        if ($checkMail && $request->get('email') !== $user->email) {
             return back()->withErrors(['email_taken' => "email $checkMail->email already in use"]);
         }
         $data = $request->only('email');
 
-        if($request->get('is_admin') && !$user->is_admin) {
+        if ($request->get('is_admin') && !$user->is_admin) {
             $data['is_admin'] = true;
         } elseif (!$request->get('is_admin') && $user->is_admin) {
             $data['is_admin'] = false;
         }
 
         return $user->save();
+    }
+    public function paginate($number)
+    {
+        return $this->model::paginate($number);
     }
 }

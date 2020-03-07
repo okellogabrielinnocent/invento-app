@@ -1,9 +1,9 @@
 @extends('layouts.app')
 
-@section('user-content')
+@section('content')
 
     <div class="container">
-        <h1> Add User </h1>
+        <h1> Create New User </h1>
         <form method="post" action="{{route('users.store')}}">
             @csrf
             @method('post')
@@ -58,7 +58,7 @@
                 <div class="form-check">
                     <input name="is_admin" class="form-check-input" type="checkbox" id="invalidCheck3">
                     <label class="form-check-label" for="invalidCheck3">
-                        Is Admin
+                        Admin
                     </label>
                 </div>
             </div>

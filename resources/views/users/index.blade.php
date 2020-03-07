@@ -2,21 +2,19 @@
 
 @section('content')
 <div class="container">
-        <h1>{{Request::path()}}</h1>
         @if(auth()->user()->is_admin())
-        <a href="{{route('users.create')}}" class="btn btn-primary btn-sm text-white mb-5">
-            Add User
+        <a href="{{route('users.create')}}" class="btn btn-primary btn-sm text-white row-12 mb-4">
+            Create New User 
         </a>
         @endif
 
-        <div class="row">
+        <div class="row col-12">
             <table class="table table-striped">
                 <thead>
                 <tr>
                     <th scope="col">Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Staff</th>
                     <th scope="col">Created</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -27,15 +25,13 @@
                        <td>{{$user->id}}</td>
                        <td>{{$user->name}}</td>
                        <td>{{$user->email}}</td>
-                       <td>{{$user->is_admin() ? "true": "false"}}</td>
-
-                       <td>{{$user->created_at->format('d/m/Y')}}</td>
+                       <td>{{$user->created_at}}</td>
                        <td>
                            <div class="row">
 
-                               <div class="col-4">
+                               <div class="col-3">
                                    @if(auth()->user()->is_admin() && auth()->id() !== $user->id)
-                                   <form class="col-md-8" action="{{ route('users.destroy', $user) }}" method="post">
+                                   <form class="col-md-6" action="{{ route('users.destroy', $user) }}" method="post">
                                        @csrf
                                        @method('delete')
                                        <button
@@ -48,13 +44,13 @@
                                    @endif
                                </div>
 
-                               <div class="col-4">
+                               <div class="col-2">
                                    @if(auth()->user()->is_admin() || auth()->id() == $user->id)
                                    <a href="{{route('users.edit', $user)}}" class="btn btn-outline-primary btn-sm">Edit</a>
                                    @endif
                                </div>
-                               <div class="col-4">
-                                   <a href="{{route('users.show', $user)}}" class="btn btn-success btn-sm">View</a>
+                               <div class="col-2">
+                                   <button class="btn btn-success btn-sm">View</button>
                                </div>
                            </div>
                        </td>
