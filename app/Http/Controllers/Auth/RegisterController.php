@@ -8,6 +8,7 @@ use App\User;
 use Illuminate\Foundation\Auth\RegistersUsers;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Validation\Rule;
 
 class RegisterController extends Controller
 {
@@ -52,7 +53,10 @@ class RegisterController extends Controller
         return Validator::make($data, [
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
-            'role'=> ['required','string'],
+            'role' => [
+                    'required',
+                    Rule::in(['admin', 'data_clerk','customer']),
+    ],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }

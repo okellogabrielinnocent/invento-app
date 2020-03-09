@@ -15,11 +15,10 @@ class AdminMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->isAdmin()) {
+        if (auth()->user()->is_admin) {
             return $next($request);
         }
 
         return back()->withErrors(['permission_denied' => 'Not allowed to perform action']);
-    
     }
 }

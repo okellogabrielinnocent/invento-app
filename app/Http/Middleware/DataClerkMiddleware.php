@@ -15,7 +15,7 @@ class DataClerkMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if(auth()->user()->isDataClerk()) {
+        if (auth()->user()->is_data_clerk) {
             return $next($request);
         }
 
