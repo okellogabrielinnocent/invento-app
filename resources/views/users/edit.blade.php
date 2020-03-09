@@ -2,12 +2,13 @@
 
 @section('content')
 <div class="container">
-        <h1> Edit {{$user->name}} </h1>
+        <h2> Edit Form </h2>
+        <h3 class="pull right">{{$user->name}}</h3>
         <form method="post" action="{{route('users.update', $user)}}">
             @csrf
             @method('put')
             <div class="form-row">
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-2">
                     <label for="validationServer01">Name</label>
                     <input name="name" type="text" class="form-control {{$errors->has('name') ? 'is-invalid': ''}} "
                            value="{{ $user->name }}">
@@ -21,7 +22,7 @@
                     @endif
                 </div>
 
-                <div class="col-md-6 mb-3">
+                <div class="col-md-6 mb-2">
                     <label for="validationServerUsername">Email</label>
                     <div class="input-group">
                         <div class="input-group-prepend">
