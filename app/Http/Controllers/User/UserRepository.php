@@ -3,7 +3,8 @@
 
 namespace App\Http\Controllers\User;
 
-use Illuminate\Foundation\Auth\User;
+// use Illuminate\Foundation\Auth\User;
+use App\User;
 use Illuminate\Database\Eloquent\Model;
 
 class UserRepository

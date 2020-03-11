@@ -21,4 +21,5 @@ Route::get('/home', 'HomeController@index')->name('home');
 Route::group(['middleware' => ['auth']], function () {
     // user resource controller
     Route::resource('users', 'User\UserController');
+    Route::resource('items', 'Item\ItemController');
 });
