@@ -17,7 +17,7 @@ class UserController extends Controller
 {
     private $userRespository;
 
-    // inject UserRepository as 
+    // inject UserRepository 
     public function __construct(UserRepository $userRespository)
     {
         $this->userRepository = $userRespository;
@@ -29,10 +29,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userRepository->paginate(10);
+        $users = $this->userRepository ?? 10;
         // TO-DO Add pagination to the database
-        // $users = $this->userRepository->config('settings.pagination.small');
-        return view('users.index')->with(['users' => $users]);
+        return view('users' . config('settings.pagination.small') . 'index')->with(['users' => $users]);
     }
 
     /**

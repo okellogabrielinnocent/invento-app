@@ -54,9 +54,9 @@ class RegisterController extends Controller
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'email', 'max:255', 'unique:users'],
             'role' => [
-                    'required',
-                    Rule::in(['admin', 'data_clerk','customer']),
-    ],
+                'required',
+                Rule::in(['admin', 'data_clerk', 'customer']),
+            ],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
         ]);
     }
@@ -72,7 +72,7 @@ class RegisterController extends Controller
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
-            'role'=> $data['role'],
+            'role' => $data['role'],
             'password' => Hash::make($data['password']),
         ]);
     }
