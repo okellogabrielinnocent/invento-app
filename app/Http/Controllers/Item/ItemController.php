@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Item;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Item\ItemRepository;
 use App\Item;
 use app\Http\Requests\CreateItemRequest;
+use Illuminate\Support\Facades\Log;
 
 class ItemController extends Controller
 {
-    public $itemRepository;
+    protected $itemRepository;
 
     public function __construct(ItemRepository $itemRepository)
     {
@@ -27,7 +28,7 @@ class ItemController extends Controller
         // Ask fro help from Jeseph of how to use the config values on pagination
         // get the pagination number or a default
         $items = $this->itemRepository->paginate(config('settings.pagination.small'));
-        return view('items.index')->with(['$items' => $items]);
+        return view('items.index')->with(['items' => $items]);
     }
 
     /**
@@ -107,7 +108,7 @@ class ItemController extends Controller
             $item->itemRepository->delete();
             return redirect()->to('items')->withSuccess('Item Deleted Succesfuly');
         } catch (\Exception $e) {
-            \Log::debug($e->getMessage());
+            Log::debug($e->getMessage());
             return redirect()->back()->withErrors(["No item to delete!"]);
         }
     }

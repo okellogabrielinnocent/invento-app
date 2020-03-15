@@ -12,10 +12,11 @@ use Illuminate\View\View;
 use App\Http\Controllers\User\UserRepository;
 use Illuminate\Foundation\Auth\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 
 class UserController extends Controller
 {
-    public $userRespository;
+    protected $userRespository;
 
     // inject UserRepository 
     public function __construct(UserRepository $userRespository)
@@ -92,7 +93,8 @@ class UserController extends Controller
     public function update(Request $request, User $user)
     {
         $this->userRepository->update($user, $request);
-        return redirect('/users')->withSuccess('User has been successfully updated');
+        dd($user);
+        return redirect()->back()->withSuccess('User has been successfully updated');
     }
 
     /**
@@ -108,7 +110,7 @@ class UserController extends Controller
             $this->userRepository->delete($user);
             return redirect()->to('users')->withSuccess('User Account Deleted');
         } catch (\Exception $e) {
-            \Log::debug($e->getMessage());
+            Log::debug($e->getMessage());
             return back()->withErrors(["No user to delete!"]);
         }
     }

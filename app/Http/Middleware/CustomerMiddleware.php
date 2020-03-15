@@ -15,7 +15,7 @@ class CustomerMiddleware
      */
     public function handle($request, Closure $next)
     {
-        if (auth()->user()->is_customer) {
+        if (auth()->user()->is_customer()) {
             return $next($request);
         }
         return back()->withErrors(['permission_denied' => 'Not allowed to perform action']);

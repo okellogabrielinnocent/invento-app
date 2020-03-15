@@ -1,7 +1,8 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
-@section('content')
-<div class="container">
+@section('dashboard-content')
+
+    <div class="container">
         @if(auth()->user()->is_admin())
         <a href="{{route('users.index')}}" class="btn btn-primary btn-sm text-white mb-5">
             Back to List
@@ -32,7 +33,7 @@
                            <div class="row">
 
                                <div class="col-4">
-                                   @if(auth()->user()->is_admin && auth()->id() !== $user->id)
+                                   @if(auth()->user()->is_admin() && auth()->id() !== $user->id)
                                    <form class="col-md-8" action="{{ route('users.destroy', $user) }}" method="post">
                                        @csrf
                                        @method('delete')
@@ -47,7 +48,7 @@
                                </div>
 
                                <div class="col-4">
-                                   @if(auth()->user()->is_admin || auth()->id() == $user->id)
+                                   @if(auth()->user()->is_admin() || auth()->id() == $user->id)
                                    <a href="{{route('users.edit', $user)}}" class="btn btn-outline-primary btn-sm">Edit</a>
                                    @endif
                                </div>
@@ -59,4 +60,5 @@
         </div>
 
     </div>
-    @endsection
+@endsection
+

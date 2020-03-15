@@ -21,7 +21,7 @@ class UserRepository
         return $this->model::all();
     }
 
-    public function findOneOrFail($id): ?Model
+    public function findOneOrFail($id)
     {
         return $this->model::findOrFail($id);
     }
@@ -51,9 +51,9 @@ class UserRepository
         }
         $data = $request->only('email');
 
-        if ($request->get('is_admin') && !$user->is_admin) {
+        if ($request->get('is_admin') && !$user->is_admin()) {
             $data['is_admin'] = true;
-        } elseif (!$request->get('is_admin') && $user->is_admin) {
+        } elseif (!$request->get('is_admin') && $user->is_admin()) {
             $data['is_admin'] = false;
         }
 
