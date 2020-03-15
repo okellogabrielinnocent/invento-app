@@ -26,8 +26,8 @@ class ItemController extends Controller
         // TO-DO
         // Ask fro help from Jeseph of how to use the config values on pagination
         // get the pagination number or a default
-        $items = $this->$itemRepository ?? 10;
-        return view('items' . config('settings.pagination.small') . '.index')->with(['$items' => $items]);
+        $items = $this->$itemRepository->paginate(config('settings.pagination.small')) ?? 10;
+        return view('items.index')->with(['$items' => $items]);
     }
 
     /**

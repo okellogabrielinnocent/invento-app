@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
 
-class UserEditRequest extends FormRequest
+class CreateServiceRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -13,7 +13,7 @@ class UserEditRequest extends FormRequest
      */
     public function authorize()
     {
-        return auth()->user()->id || auth()->user()->is_admin();
+        return auth()->user()->is_admin || auth()->user()->is_data_entrant;
     }
 
     /**
@@ -24,8 +24,8 @@ class UserEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:25|unique:users',
-            'email' => 'required|email:rfc,dns,filter,spoof,strict|unique:users',
+            'name' => 'required|string',
+            'labor' => 'required|string'
         ];
     }
 }
