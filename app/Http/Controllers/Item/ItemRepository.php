@@ -34,6 +34,10 @@ class ItemRepository
     {
         return $this->model::where($key, $value)->get();
     }
+    public function delete($id): ?model
+    {
+        return $id->delete();
+    }
 
     public function paginate($number)
     {

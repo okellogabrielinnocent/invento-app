@@ -9,7 +9,7 @@ use app\Http\Requests\CreateServiceRequest;
 
 class ServiceController extends Controller
 {
-    private $serviceRepository;
+    public $serviceRepository;
 
     public function __construct(ServiceRepository $serviceRepository)
     {
@@ -25,7 +25,7 @@ class ServiceController extends Controller
     {
         // TO-DO
         // get the pagination number or a default to 10
-        $services = $this->$serviceRepository->paginate(config('settings.pagination.small')) ?? 10;
+        $services = $this->serviceRepository->paginate(config('settings.pagination.small'));
         return view('services.index')->with(['$services' => $services]);
     }
 
@@ -85,7 +85,7 @@ class ServiceController extends Controller
     {
         $service->update($request->all());
 
-        return redirect()->route('services')->withSuccess('Service Updated Succesfuly');
+        return redirect()->route('services.index')->withSuccess('Service Updated Succesfuly');
     }
 
     /**
@@ -97,12 +97,12 @@ class ServiceController extends Controller
     public function destroy(Service $service)
     {
         try {
-            $service->delete();
-            return redirect()->to('services')->withSuccess('Service Deleted Succesfuly');
+            $service->serviceRepository->delete();
+            return redirect()->to('services.index')->withSuccess('Service Deleted Succesfuly');
         } catch (\Exception $e) {
             // log errors the error in the system
             \Log::debug($e->getMessage());
-            return "No Service to delete!";
+            return back()->withErrors(["No Service to delete!"]);
         }
     }
 }
