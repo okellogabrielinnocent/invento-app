@@ -9,7 +9,7 @@ use app\Http\Requests\CreateItemRequest;
 
 class ItemController extends Controller
 {
-    private $itemRepository;
+    public $itemRepository;
 
     public function __construct(ItemRepository $itemRepository)
     {
@@ -26,8 +26,8 @@ class ItemController extends Controller
         // TO-DO
         // Ask fro help from Jeseph of how to use the config values on pagination
         // get the pagination number or a default
-        $items = $this->$itemRepository ?? 10;
-        return view('items' . config('settings.pagination.small') . '.index')->with(['$items' => $items]);
+        $items = $this->itemRepository->paginate(config('settings.pagination.small'));
+        return view('items.index')->with(['$items' => $items]);
     }
 
     /**
@@ -104,11 +104,11 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         try {
-            $item->delete();
+            $item->itemRepository->delete();
             return redirect()->to('items')->withSuccess('Item Deleted Succesfuly');
         } catch (\Exception $e) {
             \Log::debug($e->getMessage());
-            return "No item to delete!";
+            return redirect()->back()->withErrors(["No item to delete!"]);
         }
     }
 }

@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 class UserController extends Controller
 {
-    private $userRespository;
+    public $userRespository;
 
     // inject UserRepository 
     public function __construct(UserRepository $userRespository)
@@ -29,9 +29,9 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = $this->userRepository ?? 10;
+        $users = $this->userRepository->paginate(config('settings.pagination.small'));
         // TO-DO Add pagination to the database
-        return view('users' . config('settings.pagination.small') . 'index')->with(['users' => $users]);
+        return view('users.index')->with(['users' => $users]);
     }
 
     /**
@@ -105,11 +105,11 @@ class UserController extends Controller
     public function destroy(User $user)
     {
         try {
-            $user->delete();
+            $this->userRepository->delete($user);
             return redirect()->to('users')->withSuccess('User Account Deleted');
         } catch (\Exception $e) {
             \Log::debug($e->getMessage());
-            return "No usser to delete!";
+            return back()->withErrors(["No user to delete!"]);
         }
     }
 }

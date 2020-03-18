@@ -25,7 +25,10 @@ class UserRepository
     {
         return $this->model::findOrFail($id);
     }
-
+    public function delete($id): ?model
+    {
+        return $id->delete();
+    }
     public function findByKey($key, $value): ?Model
     {
         return $this->model::where($key, $value)->first();

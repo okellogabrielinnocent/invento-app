@@ -1,16 +1,16 @@
 <?php
 
 
-namespace App\Http\Controllers\Item;
+namespace App\Http\Controllers\Service;
 
-use App\Item;
+use App\Service;
 use Illuminate\Database\Eloquent\Model;
 
-class ItemRepository
+class ServiceRepository
 {
     private $model;
 
-    public function __construct(Item $model)
+    public function __construct(Service $model)
     {
         $this->model = $model;
     }
@@ -34,6 +34,7 @@ class ItemRepository
     {
         return $this->model::where($key, $value)->get();
     }
+
     public function delete($id): ?model
     {
         return $id->delete();
