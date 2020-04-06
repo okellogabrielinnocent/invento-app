@@ -60,6 +60,9 @@ class DashboardController extends Controller
         $previous_year_services = $this->serviceRepository->whereYear('created_at', date('Y', strtotime('-1 year')))->count();
 
         $services = $this->serviceRepository->findAll();
+        // count total items
+        $services = $this->itemRepository->findAll()->count();
+        $out_of_stock_items = $this->itemRepository->findAll()->where('quantity' == 0)->count();
 
         // for charts
         $current_sales = $this->saleRepository->model::select(
