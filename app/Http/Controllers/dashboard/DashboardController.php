@@ -36,37 +36,35 @@ class DashboardController extends Controller
     public function index()
     {
         $today_date = date('Y-m-d');
-
-        $today = $this->saleRepository->model::whereDate('create_at', $today_date)->get()->count();
-        $yesterday = $this->saleRepository->model::whereDate('created_at', date('Y-m-d', strtotime('-1 day')))->get()->count();
-
         $month_date = date('m');
-        $month = $this->saleRepository->model::whereMonth('created_at', $month_date)->get()->count();
-        $previous_month = $this->saleRepository->model::whereMonth('created_at', date('m', strtotime('-1 month')))->get()->count();
-
         $year_date = date('Y');
-        $year = $this->saleRepository->model::whereYear('created_at', $year_date)->get()->count();
-        $previous_year = $this->saleRepository->model::whereYear('created_at', date('Y', strtotime('-1 year')))->get()->count();
-
         $sales = $this->saleRepository->findAll();
-
-        $today_services = $this->serviceRepository->whereDate('created_at', $today_date)->count();
-        $yesterday_services = $this->serviceRepository->whereDate('created_at', date('Y-m-d', strtotime('-1 day')))->count();
-
-        $month_services = $this->serviceRepository->whereMonth('created_at', $month_date)->count();
-        $previous_month_services = $this->serviceRepository->whereMonth('created_at', date('m', strtotime('-1 month')))->count();
-
-        $year_services = $this->serviceRepository->whereYear('created_at', $year_date)->count();
-        $previous_year_services = $this->serviceRepository->whereYear('created_at', date('Y', strtotime('-1 year')))->count();
-
         $services = $this->serviceRepository->findAll();
-        // count total items
-        $services = $this->itemRepository->findAll()->count();
-        $out_of_stock_items = $this->itemRepository->findAll()->where('quantity' == 0)->count();
+        $items = $this->itemRepository->findAll()->count();
+
+        // a. On the dashboard:
+        // - Total sales revenue (current month only),
+        $total_sales_revenue = $this->saleRepository->whereMonth('created_at', $month_date)->count();
+        // - A count of sales (current month only),
+        $stock_items_count = $this->saleRepository->findAll()->whereMonth('created_at', $month_date)->count();
+        // - Count of Items.
+        $items = $this->itemRepository->findAll()->count();
+        // - Count of Items Out of Stock.
+        $stock_items_count = $this->itemRepository->findAll()->findManyByKey('quantity', 0)->count();
+
+        // b. On the item details page:
+        // - Total sales revenue (current month only), 
+        // - A count of sales (current month only) from the specific item being viewed.
+        // c. On the customer details page:
+        // - Total sales revenue (current month only),
+        // - A count of sales (current month only) to the specific customer being viewed.
+        // d. On the staff details page:
+        // - Total sales revenue (current month only), 
+        // - A count of sales (current month only) by the specific staff being viewed.
 
         // for charts
         $current_sales = $this->saleRepository->model::select(
-            DB::raw('sum(total) as sums'),
+            DB::raw('sum(cost) as sums'),
             DB::raw("DATE_FORMAT(created_at,'%m') as months"),
             DB::raw("DATE_FORMAT(created_at,'%Y') as year")
         )

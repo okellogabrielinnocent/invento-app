@@ -60,4 +60,5 @@ class ServiceRepository
     {
         return $this->model::select($kay, $value);
     }
+    
 }

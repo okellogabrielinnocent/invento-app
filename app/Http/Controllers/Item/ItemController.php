@@ -116,4 +116,14 @@ class ItemController extends Controller
             return back()->withErrors(["No item to delete!"]);
         }
     }
+    public function getTotalPrice()
+    {
+        $totalPrice = 0;
+
+        foreach ($this->itemRepositories as $itemRepository) {
+            $totalPrice = bcadd($totalPrice, $itemRepository->cost, 2);
+        }
+
+        return $totalPrice;
+    }
 }
