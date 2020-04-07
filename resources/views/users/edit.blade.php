@@ -3,11 +3,15 @@
 @section('dashboard-content')
 
     <div class="container">
+        @if(auth()->user()->is_admin())
+        <a href="{{route('users.show', $user)}}" class="btn btn-primary btn-sm text-white mb-5">
+            Back To User
+        </a>
+        @endif
         <h1> Edit {{$user->name}} </h1>
         <form method="post" action="{{route('users.update', $user)}}">
             @csrf
             @method('put')
-            {{-- <div class="form-row"> --}}
                 <div class="form-group row">
                     <label for="validationServer01" class="col-md-2 col-form-label text-md-right">Name</label>
                     <div class="col-md-8">
@@ -45,7 +49,7 @@
                     @endif
                     </div>
                 </div>
-            @if($user->is_admin)
+            @if($user->is_admin())
                 <div class="form-group row">
                 <label for="role" class="col-md-2 col-form-label text-md-right">{{ __('Select User Type') }}</label>
                 <div class="col-md-8">
@@ -77,8 +81,8 @@
                     </div>
                 </div>
             @endif
-            <div class="form-group row">
-                <button class="btn btn-primary" type="submit">Submit form</button>
+            <div class="form-group row col-md-6">
+                <button class="btn btn-primary" type="submit">Submit</button>
             </div>
         </form>
     </div>

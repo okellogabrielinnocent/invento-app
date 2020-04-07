@@ -17,7 +17,7 @@
                     <th scope="col">Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Staff</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Created</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -28,7 +28,7 @@
                        <td>{{$user->id}}</td>
                        <td>{{$user->name}}</td>
                        <td>{{$user->email}}</td>
-                       <td>{{$user->is_admin() || $user->is_admin() ? "true": "false"}}</td>
+                        <td>{{$user->role}}</td>
 
                        <td>{{$user->created_at->format('d/m/Y')}}</td>
                        <td>

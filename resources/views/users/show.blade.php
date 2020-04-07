@@ -5,7 +5,7 @@
     <div class="container">
         @if(auth()->user()->is_admin())
         <a href="{{route('users.index')}}" class="btn btn-primary btn-sm text-white mb-5">
-            Back to List
+            Back To List
         </a>
         @endif
 
@@ -16,7 +16,7 @@
                     <th scope="col">Id</th>
                     <th scope="col">Name</th>
                     <th scope="col">Email</th>
-                    <th scope="col">Staff</th>
+                    <th scope="col">Role</th>
                     <th scope="col">Created</th>
                     <th class="text-center">Actions</th>
                 </tr>
@@ -26,7 +26,7 @@
                        <td>{{$user->id}}</td>
                        <td>{{$user->name}}</td>
                        <td>{{$user->email}}</td>
-                       <td>{{$user->is_staff ? "true": "false"}}</td>
+                       <td>{{$user->role}}</td>
 
                        <td>{{$user->created_at->format('d/m/Y')}}</td>
                        <td>
