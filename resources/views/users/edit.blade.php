@@ -8,7 +8,7 @@
             Back To User
         </a>
         @endif
-        <h1> Edit {{$user->name}} </h1>
+        <h3> Edit {{$user->name}} </h3>
         <form method="post" action="{{route('users.update', $user)}}">
             @csrf
             @method('put')

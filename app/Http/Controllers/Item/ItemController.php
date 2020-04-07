@@ -5,7 +5,11 @@ namespace App\Http\Controllers\Item;
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Item\ItemRepository;
 use App\Item;
-use app\Http\Requests\CreateItemRequest;
+use App\Http\Requests\CreateItemRequest;
+use Exception;
+use Illuminate\Contracts\View\Factory;
+use Symfony\Component\HttpFoundation\Response;
+use Illuminate\Support\Facades\View;
 use Illuminate\Support\Facades\Log;
 
 class ItemController extends Controller
@@ -51,19 +55,19 @@ class ItemController extends Controller
     {
         $request['name'] = strtoupper($request['size'] . "' " . $request['code'] . ' ' . $request['brand']);
         Item::create($request->all());
-        return redirect()->route('items.index')->withSuccess('Item created Successfully');
+        return redirect()->route('items.index')->withSuccess('Item Created Successfully');
     }
 
     /**
      * Display the specified resource.
      *
-     * @param  int  $items
+     * @param  int  $item
      * @return \Illuminate\Http\Response
      */
-    public function show(Item $items)
+    public function show(Item $item)
     {
         //return view with Item list
-        return view('items.show', compact('items'));
+        return view('items.show', compact('item'));
     }
 
     /**
@@ -93,7 +97,7 @@ class ItemController extends Controller
         } else {
             $item->update(['sealable' => false]);
         }
-        return redirect()->route('items')->withSuccess('Item Updated Succesfuly');
+        return redirect()->route('items.index')->withSuccess('Item Updated Succesfuly');
     }
 
     /**
@@ -105,11 +109,11 @@ class ItemController extends Controller
     public function destroy(Item $item)
     {
         try {
-            $item->itemRepository->delete();
+            $this->itemRepository->delete($item);
             return redirect()->to('items')->withSuccess('Item Deleted Succesfuly');
         } catch (\Exception $e) {
             Log::debug($e->getMessage());
-            return redirect()->back()->withErrors(["No item to delete!"]);
+            return back()->withErrors(["No item to delete!"]);
         }
     }
 }

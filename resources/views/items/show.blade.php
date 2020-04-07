@@ -3,7 +3,7 @@
 @section('dashboard-content')
 	<div class="container">
 		<h1>Items</h1>
-	<a href="{{route('items.index')}}" class="btn btn-sm btn-primary mb-5">Back To List</a>
+	<a href="{{route('items.index')}}" class="btn btn-sm btn-primary mb-5">Back To Items</a>
         <div class="row">
             <table class="table table-striped">
                 <thead>
@@ -52,9 +52,6 @@
                                    @if(auth()->user()->is_admin() || auth()->user()->is_data_clerk())
                                         <a href="{{route('items.edit', $item)}}" class="btn btn-outline-primary btn-sm">Edit</a>
                                    @endif
-                                </div>
-                                <div class="col-4">
-                                    <a href="{{route('items.show', $item)}}" class="btn btn-success btn-sm">View</a>
                                 </div>
                             </div>
                         </td>

@@ -3,7 +3,12 @@
 @section('dashboard-content')
 
     <div class="container">
-        <h1> Edit Item {{$item->code}} </h1>
+        @if(auth()->user()->is_admin())
+        <a href="{{route('items.show', $item)}}" class="btn btn-primary btn-sm text-white mb-5">
+            Back To  Item
+        </a>
+        @endif
+        <h3> Edit Item {{$item->code}} </h3>
         <form method="post" action="{{route('items.update', $item)}}">
             @csrf
             @method('put')
@@ -73,7 +78,7 @@
                 </div>
             </div>
 
-            <button class="btn btn-primary" type="submit">Submit form</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
         </form>
     </div>
 @endsection

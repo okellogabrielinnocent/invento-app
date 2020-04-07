@@ -34,7 +34,7 @@ class ItemRepository
     {
         return $this->model::where($key, $value)->get();
     }
-    public function delete($id): ?model
+    public function delete($id)
     {
         return $id->delete();
     }
