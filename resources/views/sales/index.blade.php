@@ -2,7 +2,7 @@
 
 @section('dashboard-content')
     <div class="container">
-        <h1>Sales</h1>
+        <h3>Sales</h3>
         <a href="{{route('sales.create')}}" class="btn btn-sm btn-primary mb-5">Add Sale</a>
 
         <table class="table table-striped">

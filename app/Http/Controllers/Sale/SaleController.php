@@ -7,6 +7,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Sale\SaleRepository;
 use App\Http\Controllers\Item\ItemRepository;
 use App\Http\Controllers\User\UserRepository;
+use App\Http\Controllers\Service\ServiceRepository;
 use App\Sale;
 use App\Http\Requests\CreateSaleRequest;
 use Illuminate\Support\Facades\Log;
@@ -16,15 +17,18 @@ class SaleController extends Controller
     protected $itemRepository;
     protected $userRepository;
     protected $saleRepository;
+    protected $serviceRepository;
     public function __construct(
         UserRepository $userRepository,
         ItemRepository $itemRepository,
-        SaleRepository $saleRepository
+        SaleRepository $saleRepository,
+        ServiceRepository $serviceRepository
     ) {
 
         $this->userRepository = $userRepository;
         $this->itemRepository = $itemRepository;
         $this->saleRepository = $saleRepository;
+        $this->serviceRepository = $serviceRepository;
     }
 
     /**
@@ -34,10 +38,13 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $sales = $this->saleRepository->model::with('customer', 'item', 'sold_by')
-            ->get();
-        // ->paginate(config('settings.pagination.small'));
-        return view('sales.index')->with(['sales' => $sales]);
+        // $sales = $this->saleRepository->model::with('customer', 'item', 'sold_by');
+        // // ->paginate(config('settings.pagination.small'));
+        // return view('sales.index')->with(['sales' => $sales]);
+        $services = $this->serviceRepository->findAll();
+        $items = $this->itemRepository->findAll();
+        $sales = $this->saleRepository->model::with('customer', 'service', 'item');
+        return view('sales.index', compact(['sales']));
     }
 
     /**
@@ -61,13 +68,13 @@ class SaleController extends Controller
     public function store(CreateSaleRequest $request)
     {
 
-        $sale = $request->only('customer_id', 'item_id', 'quantity');
-        $item = $this->itemRepository->findOneOrFail($sale['item_id']);
+        $data = $request->only('customer_id', 'item_id', 'quantity');
+        $item = $this->itemRepository->findOneOrFail($data['item_id']);
         $data['staff_id'] = auth()->id();
         if (!$item->saleable) {
             return back()->withErrors(['saleable' => 'Item is not in stock']);
         }
-        $sale = Sale::create($sale);
+        $sale = Sale::create($data);
         ItemSold::dispatch($item, $sale->quantity);
         return redirect()->to('sales')->withSuccess('Sale Added Successfully');
     }

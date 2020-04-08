@@ -3,7 +3,7 @@
 @section('dashboard-content')
 
     <div class="container">
-        <h1 class="mb-4"> Add Sale </h1>
+        <h3 class="mb-4"> Add Sale </h3>
         <form method="post" action="{{route('sales.store')}}">
             @csrf
             <div class="form-group row">
@@ -29,7 +29,7 @@
                     <select name="item_id" class=" custom-select mb-2 {{$errors->has('item_id') ? 'is-invalid': ''}}">
                         <option selected disabled>Select Item</option>
                         @foreach($items as $item)
-                            <option value="{{$item->id}}">{{$item->code}}</option>
+                            <option value="{{$item->id}}">{{$item->name}}</option>
                         @endforeach
                     </select>
                     @if ($errors->has('item_id'))
@@ -53,7 +53,7 @@
 
             </div>
 
-            <button class="btn btn-primary" type="submit">Submit form</button>
+            <button class="btn btn-primary" type="submit">Submit </button>
 
         </form>
         @if ($errors->has('saleable'))
