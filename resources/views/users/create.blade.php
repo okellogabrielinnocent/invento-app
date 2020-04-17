@@ -1,68 +1,84 @@
-@extends('layouts.app')
+@extends('layouts.dashboard')
 
-@section('content')
+@section('dashboard-content')
 
     <div class="container">
-        <h1> Create New User </h1>
-        <form method="post" action="{{route('users.store')}}">
+        <h1 class="col-md-6"> Add User </h1>
+        <form method="POST" action="{{ route('users.store') }}">
             @csrf
-            @method('post')
-            <div class="form-row">
-                <div class="col-md-6 mb-3">
-                    <label for="validationServer01">Name</label>
-                    <input name="name" type="text" class="form-control {{$errors->has('name') ? 'is-invalid': ''}} "
-                           value="{{ old('name') }}">
-                    <div class="invalid-feedback">
-                        @if ($errors->has('name'))
-                            <span id="branch_id-error" class="error text-danger" for="input-branch_id">{{ $errors->first('name') }}</span>
-                        @endif
-                    </div>
-                </div>
 
-                <div class="col-md-6 mb-3">
-                    <label for="validationServerUsername">Email</label>
-                    <div class="input-group">
-                        <div class="input-group-prepend">
-                            <span class="input-group-text" id="inputGroupPrepend3">@</span>
-                        </div>
-                        <input name="email" type="text" class="form-control {{$errors->has('email') ? 'is-invalid': ''}}"
-                             value="{{ old('email') }}" aria-describedby="inputGroupPrepend3">
-                        <div class="invalid-feedback">
-                            @if ($errors->has('email'))
-                                <span id="branch_id-error" class="error text-danger" for="input-branch_id">{{ $errors->first('email') }}</span>
-                            @endif
-                        </div>
-                    </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="validationServer02">password</label>
-                    <input name="password" type="password" class="form-control  {{$errors->has('password') ? 'is-invalid': ''}}"
-                           value="{{ old('password') }}">
-                    <div class="invalid-feedback">
-                        @if ($errors->has('password'))
-                            <span id="branch_id-error" class="error text-danger" for="input-branch_id">{{ $errors->first('password') }}</span>
-                        @endif
-                    </div>
-                </div>
-                <div class="col-md-6 mb-3">
-                    <label for="validationServer02">Confirmation</label>
-                    <input name="password_confirmation" type="password" class="form-control {{$errors->has('password_confirmation') ? 'is-invalid': ''}}" id="validationServer02">
-                    <div class="invalid-feedback">
-                        @if ($errors->has('password_confirmation'))
-                            <span id="branch_id-error" class="error text-danger" for="input-branch_id">{{ $errors->first('password_confirmation') }}</span>
-                        @endif
-                    </div>
+            <div class="form-group row">
+                <label for="name" class="col-md-2 col-form-label text-md-right">{{ __('Name') }}</label>
+
+                <div class="col-md-6">
+                    <input id="name" type="text" class="form-control @error('name') is-invalid @enderror" name="name" value="{{ old('name') }}" required autocomplete="name" autofocus>
+
+                    @error('name')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
-            <div class="form-group">
-                <div class="form-check">
-                    <input name="is_admin" class="form-check-input" type="checkbox" id="invalidCheck3">
-                    <label class="form-check-label" for="invalidCheck3">
-                        Admin
-                    </label>
+
+            <div class="form-group row">
+                <label for="email" class="col-md-2 col-form-label text-md-right">{{ __('E-Mail Address') }}</label>
+
+                <div class="col-md-6">
+                    <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email">
+
+                    @error('email')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
                 </div>
             </div>
-            <button class="btn btn-primary" type="submit">Submit form</button>
+
+            <div class="form-group row">
+                <label for="password" class="col-md-2 col-form-label text-md-right">{{ __('Password') }}</label>
+
+                <div class="col-md-6">
+                    <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="new-password">
+
+                    @error('password')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+            </div>
+            <div class="form-group row">
+                <label for="password-confirm" class="col-md-2 col-form-label text-md-right">{{ __('Confirm Password') }}</label>
+                <div class="col-md-6">
+                    <input id="password-confirm" type="password" class="form-control" name="password_confirmation" required autocomplete="new-password">
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <label for="role" class="col-md-2 col-form-label text-md-right">{{ __('Select User Type') }}</label>
+                <div class="col-md-6">
+                    <select class="form-control col-md-4 @error('role') is-invalid @enderror" name="role" id="role">
+                    <option value='customer'>Customer</option>
+                    <option value='data_clerk'>Data Clerk</option>
+                    <option value='admin'>Admin</option>
+                    </select>
+                    @error('role')
+                        <span class="invalid-feedback" role="alert">
+                            <strong>{{ $message }}</strong>
+                        </span>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="form-group row mb-0">
+                <div class="col-md-6 offset-md-4">
+                    <button type="submit" class="btn btn-primary">
+                        {{ __('Register') }}
+                    </button>
+                </div>
+            </div>
         </form>
     </div>
 @endsection
+

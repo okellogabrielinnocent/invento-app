@@ -24,8 +24,8 @@ class UserEditRequest extends FormRequest
     public function rules()
     {
         return [
-            'name' => 'required|max:25|unique:users',
-            'email' => 'required|email:rfc,dns,filter,spoof,strict|unique:users',
+            'name' => 'required|max:25',
+            'email' => 'required|email:rfc,dns,filter,spoof,strict',
         ];
     }
 }

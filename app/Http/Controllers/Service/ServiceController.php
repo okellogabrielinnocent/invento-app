@@ -1,15 +1,16 @@
 <?php
 
-namespace App\Http\Controllers;
+namespace App\Http\Controllers\Service;
 
 use App\Http\Controllers\Controller;
 use App\Http\Controllers\Service\ServiceRepository;
 use App\Service;
-use app\Http\Requests\CreateServiceRequest;
+use App\Http\Requests\CreateServiceRequest;
+use Illuminate\Support\Facades\Log;
 
 class ServiceController extends Controller
 {
-    public $serviceRepository;
+    protected $serviceRepository;
 
     public function __construct(ServiceRepository $serviceRepository)
     {
@@ -26,7 +27,7 @@ class ServiceController extends Controller
         // TO-DO
         // get the pagination number or a default to 10
         $services = $this->serviceRepository->paginate(config('settings.pagination.small'));
-        return view('services.index')->with(['$services' => $services]);
+        return view('services.index')->with(['services' => $services]);
     }
 
     /**
@@ -101,7 +102,7 @@ class ServiceController extends Controller
             return redirect()->to('services.index')->withSuccess('Service Deleted Succesfuly');
         } catch (\Exception $e) {
             // log errors the error in the system
-            \Log::debug($e->getMessage());
+            Log::debug($e->getMessage());
             return back()->withErrors(["No Service to delete!"]);
         }
     }

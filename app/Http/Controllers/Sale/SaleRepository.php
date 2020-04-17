@@ -1,18 +1,15 @@
 <?php
 
+namespace App\Http\Controllers\Sale;
 
-namespace App\Http\Controllers\User;
-
-// use Illuminate\Foundation\Auth\User;
-use App\User;
+use App\Sale;
 use Illuminate\Database\Eloquent\Model;
 
-
-class UserRepository
+class SaleRepository
 {
-    private $model;
+    public $model;
 
-    public function __construct(User $model)
+    public function __construct(Sale $model)
     {
         $this->model = $model;
     }
@@ -22,14 +19,12 @@ class UserRepository
         return $this->model::all();
     }
 
-    public function findOneOrFail($id)
+
+    public function findOneOrFail($id): ?Model
     {
         return $this->model::findOrFail($id);
     }
-    public function delete($id)
-    {
-        return $id->delete();
-    }
+
     public function findByKey($key, $value): ?Model
     {
         return $this->model::where($key, $value)->first();
@@ -38,6 +33,10 @@ class UserRepository
     public function findManyByKey($key, $value)
     {
         return $this->model::where($key, $value)->get();
+    }
+    public function delete($id): ?model
+    {
+        return $id->delete();
     }
     public function paginate($number)
     {

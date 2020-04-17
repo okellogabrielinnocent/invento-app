@@ -10,12 +10,14 @@ use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 use App\Http\Controllers\User\UserRepository;
-use Illuminate\Foundation\Auth\User;
+use App\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
+use App\Http\Requests\UserEditRequest;
 
 class UserController extends Controller
 {
-    public $userRespository;
+    protected $userRespository;
 
     // inject UserRepository 
     public function __construct(UserRepository $userRespository)
@@ -52,9 +54,8 @@ class UserController extends Controller
      */
     public function store(CreateUserRequest $request)
     {
-        $data = $request->only('name', 'email', 'password');
+        $data = $request->only('name', 'email', 'password', 'role');
         $data['password'] = Hash::make($data['password']);
-        $data['role'] = $request->get('admin');
         User::create($data);
         return redirect()->to('users')->withSuccess('User Account Created Successfully');
     }
@@ -89,10 +90,26 @@ class UserController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, User $user)
+    public function update(UserEditRequest $request, User $user)
     {
-        $this->userRepository->update($user, $request);
-        return redirect('/users')->withSuccess('User has been successfully updated');
+        $checkMial = $this->userRepository->findByKey('email', $request->get('email'));
+        $checkName = $this->userRepository->findByKey('name', $request->get('name'));
+        if ($checkMial && $request->get('email') !== $user->email) {
+            return back()->withErrors(['email_taken' => "email $checkMial->email already in use"]);
+        }
+        if ($checkName && $request->get('name') !== $user->name) {
+            return back()->withErrors(['name_taken' => "name $checkMial->name already in use"]);
+        }
+
+        $data = $request->only('email', 'name');
+
+        if ($request->get('is_admin') && !$user->is_admin()) {
+            $data['is_admin'] = true;
+        } elseif (!$request->get('is_admin') && $user->is_admin()) {
+            $data['is_admin'] = false;
+        }
+        $user->update($data);
+        return redirect()->back()->withSuccess('User has been successfully updated');
     }
 
     /**
@@ -108,7 +125,7 @@ class UserController extends Controller
             $this->userRepository->delete($user);
             return redirect()->to('users')->withSuccess('User Account Deleted');
         } catch (\Exception $e) {
-            \Log::debug($e->getMessage());
+            Log::debug($e->getMessage());
             return back()->withErrors(["No user to delete!"]);
         }
     }
