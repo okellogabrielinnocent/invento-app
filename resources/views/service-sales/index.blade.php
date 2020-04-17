@@ -43,7 +43,7 @@
                             </div>
 
                             <div class="col-4">
-                                @if(auth()->user()->is_admin() || auth()->user()->isStaff())
+                                @if(auth()->user()->is_admin() || auth()->user()->is_data_clerk())
                                     <a href="{{route('service-sales.edit', $sale)}}" class="btn btn-outline-primary btn-sm">Edit</a>
                                 @endif
                             </div>
@@ -56,8 +56,6 @@
 
             @empty
                 <p>No information to be shown!</p>
-                
-            @endempty
             @endforeach
             </tbody>
         </table>
