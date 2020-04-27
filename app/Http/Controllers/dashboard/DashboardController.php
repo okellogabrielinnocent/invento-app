@@ -79,7 +79,7 @@ class DashboardController extends Controller
             ->whereYear('created_at',  date('Y'))
             ->groupBy('months')->get();
 
-        return view('dashboard', compact('today', 'yesterday', 'month', 'previous_month', 'year', 'previous_year', 'sales', 'today_services', 'yesterday_services', 'month_services', 'previous_month_services', 'year_services', 'previous_year_services', 'services', 'current_sales', 'current_services'));
+        return view('dashboard', compact('items', 'sales,', 'services'));
     }
 
     /**
