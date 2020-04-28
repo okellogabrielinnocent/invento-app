@@ -38,13 +38,10 @@ class SaleController extends Controller
      */
     public function index()
     {
-        // $sales = $this->saleRepository->model::with('customer', 'item', 'sold_by');
-        // // ->paginate(config('settings.pagination.small'));
-        // return view('sales.index')->with(['sales' => $sales]);
         $services = $this->serviceRepository->findAll();
         $items = $this->itemRepository->findAll();
         $sales = $this->saleRepository->model::with('customer', 'service', 'item');
-        return view('sales.index', compact(['sales']));
+        return view('sales.index', compact(['sales', 'services', 'items']));
     }
 
     /**
@@ -89,7 +86,8 @@ class SaleController extends Controller
     {
         $items = $this->itemRepository->findAll();
         $customer = $this->userRepository->findManyByKey('role', 'customer');
-        return view('sales.show')->with(['items' => $items, 'customers' => $customer, 'sale' => $sale]);
+        return view('sales.show', compact('items', 'customers', 'sale'));
+        // ->with(['items' => $items, 'customers' => $customer, 'sale' => $sale])
     }
 
     /**

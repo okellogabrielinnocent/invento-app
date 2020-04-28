@@ -33,7 +33,8 @@ class UserController extends Controller
     {
         $users = $this->userRepository->paginate(config('settings.pagination.small'));
         // TO-DO Add pagination to the database
-        return view('users.index')->with(['users' => $users]);
+        return view('users.index', compact('users'));
+        // ->with(['users' => $users])
     }
 
     /**
