@@ -14,7 +14,7 @@
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="card text-white bg-info">
-                <div class="card-body pb-1">
+                <div class="card-body pb-0">
                     <p>Contents Totals Here</p>
                 </div>
                 </div>
@@ -34,7 +34,9 @@
                 </div>
             </div>
         </div>
-        <div class="row">
+        <br>
+        {{-- <div class="row">col-md-5 --}}
+        <div class="row col-md-0">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -97,7 +99,7 @@
                 </tbody>
             </table>
             {{$items ?? ''->links()}}
-	</div>
+	    </div>
     </div>
 </div>
 
