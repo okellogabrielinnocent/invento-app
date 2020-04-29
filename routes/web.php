@@ -24,4 +24,5 @@ Route::group(['middleware' => ['auth', 'is_admin',]], function () {
     Route::resource('items', 'Item\ItemController');
     Route::resource('services', 'Service\ServiceController');
     Route::resource('sales', 'Sale\SaleController');
+    Route::resource('service-sales', 'ServiceSale\ServiceSaleController');
 });

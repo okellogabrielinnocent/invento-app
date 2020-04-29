@@ -12,14 +12,14 @@
                     Customer
                 </h2>
                 <div class="col-md-6 row">
-                    <select name="customer_id" class="custom-select mb-5  {{$errors->has('customer_id') ? 'is-invalid': ''}}">
+                    <select name="item_id" class="custom-select mb-5  {{$errors->has('item_id') ? 'is-invalid': ''}}">
                         <option disabled selected value="select">Select customer</option>
                         @foreach($customers as $customer)
                             <option value="{{$customer->id}}">{{$customer->name}}</option>
                         @endforeach
                     </select>
-                    @if ($errors->has('customer_id'))
-                        <span id="code-error" class="error text-danger" for="input-branch_id">{{ $errors->first('customer_id') }}</span>
+                    @if ($errors->has('item_id'))
+                        <span id="code-error" class="error text-danger" for="input-branch_id">{{ $errors->first('item_id') }}</span>
                     @endif
                 </div>
 
@@ -27,7 +27,16 @@
             <div class="field_wrapper col-md-12 mb-3">
                 <h3>Items</h3>
                 <div>
-                    <input class="row" placeholder="Enter Item Id" type="text" name="item_id[]" value=""/>
+                    {{-- <input class="row" placeholder="Enter Item Id" type="text" name="item_id[]" value=""/> --}}
+                    <select name="item_id[]" class="row"  {{$errors->has('item_id') ? 'is-invalid': ''}}">
+                        <option disabled selected value="select">Select Item</option>
+                        @foreach($items as $item)
+                            <option value="{{$item->id}}">{{$item->name}}</option>
+                        @endforeach
+                    </select>
+                    @if ($errors->has('item_id'))
+                        <span id="code-error" class="error text-danger" for="input-branch_id">{{ $errors->first('item_id') }}</span>
+                    @endif
                     <div class="form-check">
                         <input class="form-check-input" type="checkbox" name="optional[]" id="defaultCheck1">
                         <label class="form-check-label" for="defaultCheck1">

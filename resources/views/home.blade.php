@@ -36,7 +36,7 @@
         </div>
         <br>
         {{-- <div class="row">col-md-5 --}}
-        <div class="row col-md-0">
+        {{-- <div class="row col-md-0">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -99,7 +99,7 @@
                 </tbody>
             </table>
             {{$items ?? ''->links()}}
-	    </div>
+	    </div> --}}
     </div>
 </div>
 

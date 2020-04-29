@@ -48,9 +48,9 @@ class HomeController extends Controller
         // - Total sales revenue (current month only),
         $total_sales_revenue = $this->saleRepository->whereMonth('created_at', $month_date)->count();
         // - A count of sales (current month only),
-        $stock_items_count = $this->saleRepository->findAll()->whereMonth('created_at', $month_date)->count();
+        $sales_items_count = $this->saleRepository->findAll()->whereMonth('created_at', $month_date)->count();
         // - Count of Items.
-        $items = $this->itemRepository->findAll()->count();
+        $items_count = $this->itemRepository->findAll()->count();
         // - Count of Items Out of Stock.
         $stock_items_count = $this->itemRepository->findAll()->findManyByKey('quantity', 0)->count();
 
@@ -81,7 +81,7 @@ class HomeController extends Controller
             ->whereYear('created_at',  date('Y'))
             ->groupBy('months')->get();
 
-        return view('dashboard', compact('items', 'sales,', 'services'));
+        return view('home', compact('items', 'sales,', 'services'));
     }
 
     /**
