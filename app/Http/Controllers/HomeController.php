@@ -20,13 +20,13 @@ class HomeController extends Controller
 
         UserRepository $userRepository,
         ItemRepository $itemRepository,
-        // SaleRepository $saleRepository;
+        SaleRepository $saleRepository,
         ServiceRepository $serviceRepository
     ) {
 
         $this->userRepository = $userRepository;
         $this->itemRepository = $itemRepository;
-        // $this->saleRepository = $saleRepository;
+        $this->saleRepository = $saleRepository;
         $this->serviceRepository = $serviceRepository;
         $this->middleware('auth');
     }
@@ -42,17 +42,17 @@ class HomeController extends Controller
         $year_date = date('Y');
         $sales = $this->saleRepository->findAll();
         $services = $this->serviceRepository->findAll();
-        $items = $this->itemRepository->findAll()->count();
+        $items = $this->itemRepository->paginate(config('settings.pagination.small'));
 
         // a. On the dashboard:
         // - Total sales revenue (current month only),
-        $total_sales_revenue = $this->saleRepository->whereMonth('created_at', $month_date)->count();
+        $total_sales_revenue = $this->saleRepository->findAll()->whereIn('created_at', $month_date)->count();
         // - A count of sales (current month only),
-        $sales_items_count = $this->saleRepository->findAll()->whereMonth('created_at', $month_date)->count();
+        $sales_count = $this->saleRepository->findAll()->whereIn('created_at', $month_date)->count();
         // - Count of Items.
         $items_count = $this->itemRepository->findAll()->count();
         // - Count of Items Out of Stock.
-        $stock_items_count = $this->itemRepository->findAll()->findManyByKey('quantity', 0)->count();
+        $out_of_stock = $this->itemRepository->findManyByKey('quantity', 0)->count();
 
         // b. On the item details page:
         // - Total sales revenue (current month only), 
@@ -65,23 +65,15 @@ class HomeController extends Controller
         // - A count of sales (current month only) by the specific staff being viewed.
 
         // for charts
-        $current_sales = $this->saleRepository->model::select(
-            DB::raw('sum(cost) as sums'),
-            DB::raw("DATE_FORMAT(created_at,'%m') as months"),
-            DB::raw("DATE_FORMAT(created_at,'%Y') as year")
-        )
-            ->whereYear('created_at',  date('Y'))
-            ->groupBy('months')->get();
-
         $current_services = $this->serviceRepository->select(
-            DB::raw('sum(amount) as sums'),
+            DB::raw('sum(labor) as sums'),
             DB::raw("DATE_FORMAT(created_at,'%m') as months"),
             DB::raw("DATE_FORMAT(created_at,'%Y') as year")
         )
             ->whereYear('created_at',  date('Y'))
             ->groupBy('months')->get();
 
-        return view('home', compact('items', 'sales,', 'services'));
+        return view('home', compact('items', 'items_count', 'out_of_stock', 'sales_count', 'services'));
     }
 
     /**

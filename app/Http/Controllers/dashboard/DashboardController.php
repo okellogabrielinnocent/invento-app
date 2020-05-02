@@ -19,13 +19,13 @@ class DashboardController extends Controller
     public function __construct(
         UserRepository $userRepository,
         ItemRepository $itemRepository,
-        // SaleRepository $saleRepository;
+        SaleRepository $saleRepository,
         ServiceRepository $serviceRepository
     ) {
 
         $this->userRepository = $userRepository;
         $this->itemRepository = $itemRepository;
-        // $this->saleRepository = $saleRepository;
+        $this->saleRepository = $saleRepository;
         $this->serviceRepository = $serviceRepository;
     }
     /**
@@ -40,15 +40,15 @@ class DashboardController extends Controller
         $year_date = date('Y');
         $sales = $this->saleRepository->findAll();
         $services = $this->serviceRepository->findAll();
-        $items = $this->itemRepository->findAll()->count();
+        $items = $this->itemRepository->findAll();
 
         // a. On the dashboard:
         // - Total sales revenue (current month only),
-        $total_sales_revenue = $this->saleRepository->whereMonth('created_at', $month_date)->count();
+        $total_sales_revenue = $this->saleRepository->findAll()->whereMonth('created_at', $month_date)->count();
         // - A count of sales (current month only),
         $stock_items_count = $this->saleRepository->findAll()->whereMonth('created_at', $month_date)->count();
         // - Count of Items.
-        $items = $this->itemRepository->findAll()->count();
+        $items_count = $this->itemRepository->findAll()->count();
         // - Count of Items Out of Stock.
         $stock_items_count = $this->itemRepository->findAll()->findManyByKey('quantity', 0)->count();
 

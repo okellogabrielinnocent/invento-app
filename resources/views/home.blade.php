@@ -8,35 +8,40 @@
             <div class="col-sm-4 col-lg-3">
                 <div class="card text-white bg-primary">
                 <div class="card-body pb-0">
-                    <p>Contents Totals Here</p>
+                    <h5>Total Sales Revenue (Current Month Only)</h5>
+                    <p>{{$items->sum('quantity') }}</p>
                 </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="card text-white bg-info">
                 <div class="card-body pb-0">
-                    <p>Contents Totals Here</p>
+                    <h5>Count Of Sales (Current Month Only)</h5>
+                    <p>{{$sales_count}}</p>
                 </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="card text-white bg-warning">
                 <div class="card-body pb-0">
-                    <p>Contents Totals Here</p>
+                    <h5>Count of Items</h5>
+                    <br>
+                    <p>{{$items_count}}</p>
                 </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="card text-white bg-danger">
                 <div class="card-body pb-0">
-                    <p>Contents Totals Here</p>
+                    <h5>Out of Stock Items</h5>
+                    <p>{{$out_of_stock}}</p>
                 </div>
                 </div>
             </div>
         </div>
         <br>
-        {{-- <div class="row">col-md-5 --}}
-        {{-- <div class="row col-md-0">
+        <div class="row">
+        <div class="row col-md-0">
             <table class="table table-striped">
                 <thead>
                 <tr>
@@ -99,7 +104,7 @@
                 </tbody>
             </table>
             {{$items ?? ''->links()}}
-	    </div> --}}
+	    </div>
     </div>
 </div>
 
