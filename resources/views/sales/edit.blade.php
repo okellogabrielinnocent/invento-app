@@ -34,7 +34,7 @@
                 </h2>
                 <div class="col-md-6 row">
                     <select name="item_id" class=" custom-select mb-2 {{$errors->has('item_id') ? 'is-invalid': ''}}">
-                        <option selected value="{{$sale->item->id}}">{{$sale->item->code}}</option>
+                        <option selected value="{{$sale->item->id}}">{{$sale->item->name}}</option>
                         @foreach($items as $item)
                             @if($item->id != $sale->item_id)
                             <option value="{{$item->id}}">{{$item->code}}</option>
@@ -61,7 +61,7 @@
 
             </div>
 
-            <button class="btn btn-primary" type="submit">Submit form</button>
+            <button class="btn btn-primary" type="submit">Submit</button>
 
         </form>
         @if ($errors->has('saleable'))

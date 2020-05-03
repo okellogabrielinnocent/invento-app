@@ -9,10 +9,10 @@
             <thead>
             <tr>
                 <th scope="col">Id</th>
-                <th scope="col">customer</th>
-                <th scope="col">product code</th>
-                <th scope="col">quantity purchased</th>
-                <th scope="col">Recorded by</th>
+                <th scope="col">Customer</th>
+                <th scope="col">Product Code</th>
+                <th scope="col">Quantity Purchased</th>
+                <th scope="col">Sold by</th>
                 <th scope="col">Created on</th>
                 <th class="text-center">Actions</th>
             </tr>
@@ -23,7 +23,7 @@
                     <td>{{$sale->customer->name}}</td>
                     <td><a href="{{route('items.show',$sale->item->id)}}">{{$sale->item->code}}</a></td>
                     <td>{{$sale->quantity}}</td>
-                    <td>{{$sale->sold_by->email}}</td>
+                    <td>{{$sale->sold_by->name}}</td>
                     <td>{{$sale->created_at->format('d/m/Y')}}</td>
                     <td>
                         <div class="row">

@@ -54,9 +54,6 @@ class HomeController extends Controller
         // - Count of Items Out of Stock.
         $out_of_stock = $this->itemRepository->findManyByKey('quantity', 0)->count();
 
-        // b. On the item details page:
-        // - Total sales revenue (current month only), 
-        // - A count of sales (current month only) from the specific item being viewed.
         // c. On the customer details page:
         // - Total sales revenue (current month only),
         // - A count of sales (current month only) to the specific customer being viewed.
@@ -73,7 +70,7 @@ class HomeController extends Controller
             ->whereYear('created_at',  date('Y'))
             ->groupBy('months')->get();
 
-        return view('home', compact('items', 'items_count', 'out_of_stock', 'sales_count', 'services'));
+        return view('home', compact('items', 'sales', 'items_count', 'out_of_stock', 'sales_count', 'services'));
     }
 
     /**
