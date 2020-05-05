@@ -66,12 +66,13 @@ class SaleController extends Controller
     {
 
         $data = $request->only('customer_id', 'item_id', 'quantity');
-        $item = $this->itemRepository->findOneOrFail($data['item_id']);
+        $item = $this->itemRepository->findOneOrFail($data['item_id'])->get();
         $data['staff_id'] = auth()->id();
         if (!$item->saleable) {
             return back()->withErrors(['saleable' => 'Item is not in stock']);
         }
         $sale = Sale::create($data);
+        // Sale::decrement($item, $sale->quantity);
         ItemSold::dispatch($item, $sale->quantity);
         return redirect()->to('sales')->withSuccess('Sale Added Successfully');
     }

@@ -42,4 +42,8 @@ class SaleRepository
     {
         return $this->model::paginate($number);
     }
+    public function whereMonth($key, $value)
+    {
+        return $this->model::whereMonth($key, $value);
+    }
 }

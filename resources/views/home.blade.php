@@ -8,25 +8,24 @@
             <div class="col-sm-4 col-lg-3">
                 <div class="card text-white bg-primary">
                 <div class="card-body pb-0">
-                    <h5>Total Sales Revenue (Current Month Only)</h5>
-                    <p>{{$items->sum('quantity') }}</p>
+                    <h5>Monthly Sales Revenue</h5>
+                    <p>${{ $total_sales_revenue }}</p>
                 </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
                 <div class="card text-white bg-info">
                 <div class="card-body pb-0">
-                    <h5>Count Of Sales (Current Month Only)</h5>
+                    <h5>Monthly Sales</h5>
                     <p>{{$sales_count}}</p>
                 </div>
                 </div>
             </div>
             <div class="col-sm-6 col-lg-3">
-                <div class="card text-white bg-warning">
+                <div class="card text-white bg-secondary">
                 <div class="card-body pb-0">
                     <h5>Count of Items</h5>
-                    <br>
-                    <p>{{$items_count}}</p>
+                    <p>{{$items->sum('quantity') }}</p>
                 </div>
                 </div>
             </div>

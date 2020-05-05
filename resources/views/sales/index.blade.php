@@ -4,7 +4,6 @@
     <div class="container">
         <h3>Sales</h3>
         <a href="{{route('sales.create')}}" class="btn btn-sm btn-primary mb-5">Add Sale</a>
-
         <table class="table table-striped">
             <thead>
             <tr>
@@ -12,6 +11,7 @@
                 <th scope="col">Customer</th>
                 <th scope="col">Product Code</th>
                 <th scope="col">Quantity Purchased</th>
+                <th scope="col">Total Cost</th>
                 <th scope="col">Sold by</th>
                 <th scope="col">Created on</th>
                 <th class="text-center">Actions</th>
@@ -24,6 +24,7 @@
                     <td>{{$sale->customer->name}}</td>
                     <td><a href="{{route('items.show',$sale->item->id)}}">{{$sale->item->code}}</a></td>
                     <td>{{$sale->quantity}}</td>
+                    <td>{{$sale->item->cost * $sale->quantity}}</td>
                     <td>{{$sale->sold_by->name}}</td>
                     <td>{{$sale->created_at->format('d/m/Y')}}</td>
                     <td>

@@ -5,7 +5,7 @@
         <div class="card row-5 text-white bg-primary">
             <div class="card-body pb-0">
                 <h5>Total Sales Revenue</h5>
-                <p>{{ $sales_count }}</p>
+                <p>{{ $sales_revenue }}</p>
             </div>
         </div>
     </div>

@@ -40,15 +40,23 @@ class HomeController extends Controller
         $today_date = date('Y-m-d');
         $month_date = date('m');
         $year_date = date('Y');
-        $sales = $this->saleRepository->findAll();
+        $sales = $this->saleRepository->whereMonth('created_at', $month_date);
         $services = $this->serviceRepository->findAll();
         $items = $this->itemRepository->paginate(config('settings.pagination.small'));
 
         // a. On the dashboard:
         // - Total sales revenue (current month only),
-        $total_sales_revenue = $this->saleRepository->findAll()->whereIn('created_at', $month_date)->count();
+        // Sales Revenue = Units Sold x Sales Price.
+        // TO-DO
+        // Calculate total sales revenue
+        $units_sold = $this->saleRepository->whereMonth('created_at', $month_date)->count();
+        // dd($units_sold);
+        $sales_price = $this->saleRepository->findAll()->sum('item.cost');
+        // dd($sales_price);
+        $total_sales_revenue = $units_sold * $sales_price;
+
         // - A count of sales (current month only),
-        $sales_count = $this->saleRepository->findAll()->whereIn('created_at', $month_date)->count();
+        $sales_count = $this->saleRepository->whereMonth('created_at', $month_date)->count();
         // - Count of Items.
         $items_count = $this->itemRepository->findAll()->count();
         // - Count of Items Out of Stock.
@@ -70,7 +78,7 @@ class HomeController extends Controller
             ->whereYear('created_at',  date('Y'))
             ->groupBy('months')->get();
 
-        return view('home', compact('items', 'sales', 'items_count', 'out_of_stock', 'sales_count', 'services'));
+        return view('home', compact('items', 'sales', 'items_count', 'total_sales_revenue', 'out_of_stock', 'sales_count', 'services'));
     }
 
     /**

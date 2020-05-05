@@ -75,12 +75,12 @@ class ItemController extends Controller
 
         // - A count of sales (current month only) from the specific item being viewed.
         $month_date = date('m');
+        $sales_revenue = $this->saleRepository->findAll()->sum('item.cost');
         $sales_count = $this->saleRepository
-            ->findAll()
-            ->where('item')
-            ->whereIn('created_at', $month_date)
+            ->whereMonth('created_at', $month_date)
+            ->find($item)
             ->count();
-        return view('items.show', compact('item', 'sales_count'));
+        return view('items.show', compact('item', 'sales_count', 'sales_revenue'));
     }
 
     /**
