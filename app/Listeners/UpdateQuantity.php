@@ -32,6 +32,8 @@ class UpdateQuantity
 
         if ($remaining_quantity <= $event->item->minimum_quantity) {
             $request['saleable'] = false;
+        }else{
+            
         }
 
         $event->item->update($request);

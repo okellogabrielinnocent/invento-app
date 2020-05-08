@@ -7,7 +7,7 @@ use Illuminate\Database\Eloquent\Model;
 
 class ServiceSaleRepository
 {
-    private $model;
+    public $model;
 
     public function __construct(ServiceSale $model)
     {

@@ -41,8 +41,9 @@ class ServiceSaleController extends Controller
     {
         $services = $this->serviceRepository->findAll();
         $items = $this->itemRepository->findAll();
-        $sales = $this->serviceSaleRepository->model::with('customer', 'service', 'item')->paginate(10);
-        return view('service-sales.index')->with(['sales' => $sales]);
+        $sales = $this->serviceSaleRepository->model::with('customer', 'service', 'item')
+            ->paginate(config('settings.pagination.small'));;
+        return view('service-sales.index')->with(['sales' => $sales, 'items' => $items, 'services' => $services]);
     }
 
     /**
@@ -54,7 +55,7 @@ class ServiceSaleController extends Controller
     {
         $services = $this->serviceRepository->findAll();
         $items = $this->itemRepository->findAll();
-        $customers =  $this->userRepository->findManyByKey('user_type', 'customer');
+        $customers =  $this->userRepository->findManyByKey('role', 'customer');
         return view('service-sales.create')->with([
             'services' => $services,
             'items' => $items, 'customers' => $customers

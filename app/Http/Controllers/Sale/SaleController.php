@@ -29,6 +29,7 @@ class SaleController extends Controller
         $this->itemRepository = $itemRepository;
         $this->saleRepository = $saleRepository;
         $this->serviceRepository = $serviceRepository;
+        $this->middleware('is_admin')->only('destroy');
     }
 
     /**
@@ -38,10 +39,9 @@ class SaleController extends Controller
      */
     public function index()
     {
-        $services = $this->serviceRepository->findAll();
-        $items = $this->itemRepository->findAll();
-        $sales = $this->saleRepository->model::with('customer', 'service', 'item');
-        return view('sales.index', compact(['sales', 'services', 'items']));
+        $sales = $this->saleRepository->model::with('customer', 'item', 'sold_by')
+            ->paginate(config('settings.pagination.small'));
+        return view('sales.index')->with(['sales' => $sales]);
     }
 
     /**
@@ -66,12 +66,13 @@ class SaleController extends Controller
     {
 
         $data = $request->only('customer_id', 'item_id', 'quantity');
-        $item = $this->itemRepository->findOneOrFail($data['item_id']);
+        $item = $this->itemRepository->findOneOrFail($data['item_id'])->get();
         $data['staff_id'] = auth()->id();
         if (!$item->saleable) {
             return back()->withErrors(['saleable' => 'Item is not in stock']);
         }
         $sale = Sale::create($data);
+        // Sale::decrement($item, $sale->quantity);
         ItemSold::dispatch($item, $sale->quantity);
         return redirect()->to('sales')->withSuccess('Sale Added Successfully');
     }
@@ -86,8 +87,7 @@ class SaleController extends Controller
     {
         $items = $this->itemRepository->findAll();
         $customer = $this->userRepository->findManyByKey('role', 'customer');
-        return view('sales.show', compact('items', 'customers', 'sale'));
-        // ->with(['items' => $items, 'customers' => $customer, 'sale' => $sale])
+        return view('sales.show', compact('items', 'customer', 'sale'));
     }
 
     /**

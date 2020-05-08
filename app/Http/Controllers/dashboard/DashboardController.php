@@ -11,13 +11,12 @@ use App\Http\Controllers\Item\ItemRepository;
 use App\Http\Controllers\User\UserRepository;
 use Illuminate\Support\Facades\DB;
 
-class HomeController extends Controller
+class DashboardController extends Controller
 {
     protected $itemRepository;
     protected $userRepository;
     protected $saleRepository;
     public function __construct(
-
         UserRepository $userRepository,
         ItemRepository $itemRepository,
         SaleRepository $saleRepository,
@@ -28,7 +27,6 @@ class HomeController extends Controller
         $this->itemRepository = $itemRepository;
         $this->saleRepository = $saleRepository;
         $this->serviceRepository = $serviceRepository;
-        $this->middleware('auth');
     }
     /**
      * Display a listing of the resource.
@@ -40,28 +38,23 @@ class HomeController extends Controller
         $today_date = date('Y-m-d');
         $month_date = date('m');
         $year_date = date('Y');
-        $sales = $this->saleRepository->whereMonth('created_at', $month_date);
+        $sales = $this->saleRepository->findAll();
         $services = $this->serviceRepository->findAll();
-        $items = $this->itemRepository->paginate(config('settings.pagination.small'));
+        $items = $this->itemRepository->findAll();
 
         // a. On the dashboard:
         // - Total sales revenue (current month only),
-        // Sales Revenue = Units Sold x Sales Price.
-        // TO-DO
-        // Calculate total sales revenue
-        $units_sold = $this->saleRepository->whereMonth('created_at', $month_date)->count();
-        // dd($units_sold);
-        $sales_price = $this->saleRepository->findAll()->sum('item.cost');
-        // dd($sales_price);
-        $total_sales_revenue = $units_sold * $sales_price;
-
+        $total_sales_revenue = $this->saleRepository->findAll()->whereMonth('created_at', $month_date)->count();
         // - A count of sales (current month only),
-        $sales_count = $this->saleRepository->whereMonth('created_at', $month_date)->count();
+        $stock_items_count = $this->saleRepository->findAll()->whereMonth('created_at', $month_date)->count();
         // - Count of Items.
         $items_count = $this->itemRepository->findAll()->count();
         // - Count of Items Out of Stock.
-        $out_of_stock = $this->itemRepository->findManyByKey('quantity', 0)->count();
+        $stock_items_count = $this->itemRepository->findAll()->findManyByKey('quantity', 0)->count();
 
+        // b. On the item details page:
+        // - Total sales revenue (current month only), 
+        // - A count of sales (current month only) from the specific item being viewed.
         // c. On the customer details page:
         // - Total sales revenue (current month only),
         // - A count of sales (current month only) to the specific customer being viewed.
@@ -70,15 +63,23 @@ class HomeController extends Controller
         // - A count of sales (current month only) by the specific staff being viewed.
 
         // for charts
-        $current_services = $this->serviceRepository->select(
-            DB::raw('sum(labor) as sums'),
+        $current_sales = $this->saleRepository->model::select(
+            DB::raw('sum(cost) as sums'),
             DB::raw("DATE_FORMAT(created_at,'%m') as months"),
             DB::raw("DATE_FORMAT(created_at,'%Y') as year")
         )
             ->whereYear('created_at',  date('Y'))
             ->groupBy('months')->get();
 
-        return view('home', compact('items', 'sales', 'items_count', 'total_sales_revenue', 'out_of_stock', 'sales_count', 'services'));
+        $current_services = $this->serviceRepository->select(
+            DB::raw('sum(amount) as sums'),
+            DB::raw("DATE_FORMAT(created_at,'%m') as months"),
+            DB::raw("DATE_FORMAT(created_at,'%Y') as year")
+        )
+            ->whereYear('created_at',  date('Y'))
+            ->groupBy('months')->get();
+
+        return view('dashboard', compact('items', 'sales,', 'services'));
     }
 
     /**

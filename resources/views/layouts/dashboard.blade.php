@@ -5,7 +5,7 @@
     <div class="bg-light card shadow"  style="width: 10rem">
         <div class="list-group list-group-flush">
             <a href="/" class="list-group-item list-group-item-action {{Request::path() === '/' ? 'active': ''}}">Home</a>
-            <a href="#" class="list-group-item list-group-item-action ">Profile</a>
+            {{-- <a href="#" class="list-group-item list-group-item-action ">Profile</a> --}}
             @if(auth()->user()->is_admin())
                 <a href="{{route('users.index')}}" class="list-group-item list-group-item-action
                 {{\Request::is('users/*') || \Request::is('users') ? 'active': ''}}">Users</a>

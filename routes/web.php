@@ -12,16 +12,17 @@
 */
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('home');
+})->middleware('auth');
 
 Auth::routes();
 
-Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/', 'HomeController@index')->name('home');
 Route::group(['middleware' => ['auth', 'is_admin',]], function () {
     // user resource controller
     Route::resource('users', 'User\UserController');
     Route::resource('items', 'Item\ItemController');
     Route::resource('services', 'Service\ServiceController');
     Route::resource('sales', 'Sale\SaleController');
+    Route::resource('service-sales', 'ServiceSale\ServiceSaleController');
 });

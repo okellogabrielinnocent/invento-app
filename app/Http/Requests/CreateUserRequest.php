@@ -25,7 +25,8 @@ class CreateUserRequest extends FormRequest
     {
         return [
             'name' => 'required|max:25|unique:users',
-            'email' => 'bail|required|email:rfc,dns,filter,spoof,strict|unique:users',
+            // 'email' => 'bail|required|email:rfc,dns,filter,spoof,strict|unique:users',
+            'email' => 'email:rfc,dns |unique:users',
             'password' => 'required|min:8|max:25|confirmed',
             'password_confirmation' => 'required',
             'role' => 'required | string',

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Controllers\Item\ItemRepository;
 use App\Item;
 use App\Http\Requests\CreateItemRequest;
+use App\Http\Controllers\Sale\SaleRepository;
 use Exception;
 use Illuminate\Contracts\View\Factory;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,10 +16,12 @@ use Illuminate\Support\Facades\Log;
 class ItemController extends Controller
 {
     protected $itemRepository;
+    protected $saleRepository;
 
-    public function __construct(ItemRepository $itemRepository)
+    public function __construct(ItemRepository $itemRepository, SaleRepository $saleRepository)
     {
         $this->itemRepository = $itemRepository;
+        $this->saleRepository = $saleRepository;
     }
 
     /**
@@ -32,7 +35,7 @@ class ItemController extends Controller
         // Ask fro help from Jeseph of how to use the config values on pagination
         // get the pagination number or a default
         $items = $this->itemRepository->paginate(config('settings.pagination.small'));
-        return view('items.index')->with(['items' => $items]);
+        return view('items.index', compact('items'));
     }
 
     /**
@@ -67,7 +70,17 @@ class ItemController extends Controller
     public function show(Item $item)
     {
         //return view with Item list
-        return view('items.show', compact('item'));
+        // b. On the item details page:
+        // - Total sales revenue (current month only)
+
+        // - A count of sales (current month only) from the specific item being viewed.
+        $month_date = date('m');
+        $sales_revenue = $this->saleRepository->findAll()->sum('item.cost');
+        $sales_count = $this->saleRepository
+            ->whereMonth('created_at', $month_date)
+            ->find($item)
+            ->count();
+        return view('items.show', compact('item', 'sales_count', 'sales_revenue'));
     }
 
     /**
@@ -115,5 +128,15 @@ class ItemController extends Controller
             Log::debug($e->getMessage());
             return back()->withErrors(["No item to delete!"]);
         }
+    }
+    public function getTotalPrice()
+    {
+        $totalPrice = 0;
+
+        foreach ($this->itemRepositories as $itemRepository) {
+            $totalPrice = bcadd($totalPrice, $itemRepository->cost, 2);
+        }
+
+        return $totalPrice;
     }
 }

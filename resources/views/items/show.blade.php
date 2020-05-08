@@ -1,9 +1,25 @@
 @extends('layouts.dashboard')
 
 @section('dashboard-content')
+    <div class="col-sm-4 col-lg-3 float-right">
+        <div class="card row-5 text-white bg-primary">
+            <div class="card-body pb-0">
+                <h5>Total Sales Revenue</h5>
+                <p>{{ $sales_revenue }}</p>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-4 col-lg-3 float-right">
+        <div class="card row-5 text-white bg-secondary">
+            <div class="card-body pb-0">
+                <h5>Sales Count</h5>
+                <p>{{ $sales_count }}</p>
+            </div>
+        </div>
+    </div>
 	<div class="container">
-		<h1>Items</h1>
-	<a href="{{route('items.index')}}" class="btn btn-sm btn-primary mb-5">Back To Items</a>
+		<h1>Item</h1>
+        <a href="{{route('items.index')}}" class="btn btn-sm btn-primary mb-5">Back To Items</a>
         <div class="row">
             <table class="table table-striped">
                 <thead>
